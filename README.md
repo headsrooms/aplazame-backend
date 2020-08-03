@@ -30,6 +30,10 @@ To run with docker execute:
     docker-compose build
     docker-compose up
     
+## Deploy
+
+The project deploys itself to the instance each time a commit is made through Github Actions.
+
 ## Objetivos a completar
 
 1) Indica cómo se puede optimizar el rendimiento del servicio de listado de operaciones.
