@@ -59,3 +59,20 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           file: ./coverage.xml
+      - name: deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          script: |
+            cd /home/ubuntu/code/aplazame-backend
+            sudo docker-compose down
+            cd ..
+            sudo rm -rf aplazame-backend
+            git clone https://github.com/kingoodie/aplazame-backend.git
+            cd aplazame-backend
+            sudo docker-compose build
+            sudo docker-compose up
