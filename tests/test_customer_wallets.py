@@ -1,3 +1,4 @@
+from random import uniform
 from uuid import uuid4
 
 import pytest
@@ -71,13 +72,16 @@ def test_try_to_get_a_non_existent_wallet(client):
 
 def test_deposit_money(client, customer_wallet):
     wallet_id = str(customer_wallet.id)
-    payload = {"amount": 500, "description": "First entry"}
+    payload = {"amount": uniform(0, 200_000), "description": "First entry"}
     response = client.post(f"/customers/wallets/{wallet_id}/deposit", json=payload)
 
     assert response.status_code == 201
     json_response = response.json()
-    assert json_response["amount"] == payload["amount"]
+    assert json_response["amount"] == round(payload["amount"], 4)
     assert json_response["description"] == payload["description"]
+
+    response = client.get(f"/customers/wallets/{wallet_id}").json()
+    assert response["balance"] == round(payload["amount"], 4)
 
 
 def test_try_to_deposit_in_a_non_existent_wallet(client):
@@ -102,3 +106,6 @@ def test_try_to_deposit_negative_amount(client, customer_wallet):
         response.raise_for_status()
 
     assert response.status_code == 409
+
+    response = client.get(f"/customers/wallets/{wallet_id}").json()
+    assert response["balance"] == 0
