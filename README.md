@@ -43,7 +43,7 @@ To run the server execute:
     hacer una consulta adicional si quisieramos obtener los datos de la transacciones.
    
     Aparte de esto, podríamos cachear la respuesta, así nos "ahorraríamos" el coste de 
-    las subsiguientes consultas, si no hubiera actualización. El problema sería que habría
+    las subsiguientes consultas a los mismas cuentas, si no hubiera actualización. El problema sería que habría
     que crear otro mecanismo adicional de invalidación de caché.
    
     Creo que esta pregunta se podría referir a alguna de estas opciones, aunque podría 
@@ -75,7 +75,8 @@ escritura?
    Con Event Sourcing (que es compatible con CQRS) almacenaríamos todas las operaciones en forma
    de eventos en un log de eventos. Con las eventos "a salvo" en el almacén de eventos (es append-only y los eventos
    inmutables), iríamos procesándolos a un ritmo que evitaría las posibles saturaciones que tendríamos si estas 
-   operaciones fueran directamente contra la base de datos.
+   operaciones fueran directamente contra la base de datos. Además este procesado sería bastante escalable,
+   puesto que podríamos habilitar un determinado número de workers para ello.
    
    En el caso que nos ocupa, veo muy conveniente el uso en especial de Event Sourcing, ya que nos permitiría
    soportar un gran número de transacciones por segundo. Además gracias a la existencia del bus de eventos
@@ -122,8 +123,9 @@ con alguna NoSQL, ¿qué me recomiendas?
    MongoDB o ElasticSearch
    - Si los datos tienen baja dimensionalidad y el tiempo es una columna clave, se debería de utilizar una base
    de datos de series de tiempo como pueden ser Influx o Prometheus en otras.
-   - Si se necesita realizar análisis sobre bases de datos no normalizadas utilizaría Clickhouse.
-   - Si el valor de la información está en la conexión entre los datos o los modelos de las bases de datos SQL
+   - Si se necesita realizar análisis sobre datos no normalizadas utilizaría Clickhouse. Clickhouse utiliza
+   como lenguaje SQL, aunque digamos que no está diseñado para comportarse igual que las relacionales tradicionales.
+   - Si el valor de la información está en la conexión entre los datos o los modelos de las bases de datos relacionales
    usaran relaciones ManyToMany en exceso, usaría alguna base de datos de grafos como Neo4j.
    - Por último, si las estructuras de datos usadas fueran sencillas y variadas, utilizaría Redis.
    
@@ -145,7 +147,7 @@ funcionan correctamente?
    sistema. Estos sistemas también servirían para hacer un seguimiento de los errores.
    - Health checks. Servicios simples que consultarían nuestros sistemas periódicamente para ver que todo sigue como
    se esperaba.
-   - Malla de servicios. A cada microservicio se le acoplaría un sidecar que aportaría métricas
+   - Malla de servicios (service mesh). A cada microservicio se le acoplaría un sidecar que aportaría métricas
    estandarizadas y aparte gestionaría problemáticas como el reintento de conexiones, timeouts y
    cortocircuitos. Se puede usar Istio, envoy o linkerd. 
    - Finalmente, podríamos usar un sistema de trazabilidad distribuido, teniendo mayor sentido con el uso de
