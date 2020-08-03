@@ -31,6 +31,7 @@ async def get_transactions_by_wallet(
     for transaction in transactions:
         key = transaction.pop("customer_wallet_id")
         transactions_by_wallet[key].append(transaction)
+
     response = [
         {"id": wallet_id, "transactions": transactions}
         for wallet_id, transactions in transactions_by_wallet.items()

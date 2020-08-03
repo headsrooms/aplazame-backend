@@ -21,6 +21,7 @@ async def get_transactions(request: Request) -> UJSONResponse:
         await customer.wallets.filter(deposit_transactions__id__not_isnull=True)
         .prefetch_related("deposit_transactions")
         .values(
+            id="deposit_transactions__id",
             customer_wallet_id="id",
             amount="deposit_transactions__amount",
             status="deposit_transactions__status",
@@ -28,12 +29,13 @@ async def get_transactions(request: Request) -> UJSONResponse:
             description="deposit_transactions__description",
             created_at="deposit_transactions__created_at",
         )
-    ) or []
+    )
 
     debit_transactions = (
         await customer.wallets.filter(debit_transactions__id__not_isnull=True)
         .prefetch_related("debit_transactions")
         .values(
+            id="debit_transactions__id",
             customer_wallet_id="id",
             business_wallet_id="debit_transactions__business_wallet__id",
             amount="debit_transactions__amount",
@@ -42,7 +44,7 @@ async def get_transactions(request: Request) -> UJSONResponse:
             description="debit_transactions__description",
             created_at="debit_transactions__created_at",
         )
-    ) or []
+    )
 
     response = await get_transactions_by_wallet(
         deposit_transactions, debit_transactions
@@ -55,25 +57,27 @@ async def get_customer_wallet_transactions(request: Request) -> UJSONResponse:
 
     try:
         deposit_transactions = (
-            await CustomerWallet.get(
+            await CustomerWallet.filter(
                 id=wallet_id, deposit_transactions__id__not_isnull=True
             )
             .prefetch_related("deposit_transactions")
             .values(
+                id="deposit_transactions__id",
                 amount="deposit_transactions__amount",
                 status="deposit_transactions__status",
                 error="deposit_transactions__error",
                 description="deposit_transactions__description",
                 created_at="deposit_transactions__created_at",
             )
-        ) or []
+        )
 
         debit_transactions = (
-            await CustomerWallet.get(
+            await CustomerWallet.filter(
                 id=wallet_id, debit_transactions__id__not_isnull=True
             )
             .prefetch_related("debit_transactions")
             .values(
+                id="debit_transactions__id",
                 business_wallet_id="debit_transactions__business_wallet__id",
                 amount="debit_transactions__amount",
                 status="debit_transactions__status",
@@ -81,7 +85,8 @@ async def get_customer_wallet_transactions(request: Request) -> UJSONResponse:
                 description="debit_transactions__description",
                 created_at="debit_transactions__created_at",
             )
-        ) or []
+        )
+
     except DoesNotExist:
         raise HTTPException(
             status_code=404, detail=f"There is no wallet with id {wallet_id}"

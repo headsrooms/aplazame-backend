@@ -98,4 +98,6 @@ async def debit(request: Request) -> UJSONResponse:
         raise HTTPException(status_code=409, detail=str(e))
 
     response = OutputDebitTransactionSchema.from_orm(transaction)
-    return UJSONResponse(loads(response.json()), status_code=HTTP_201_CREATED)
+    response = loads(response.json())
+    response["id"] = str(transaction.id)
+    return UJSONResponse(response, status_code=HTTP_201_CREATED)

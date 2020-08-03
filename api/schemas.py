@@ -86,11 +86,13 @@ class OutputTransactionListSchema:
 
 @dataclass(frozen=True)
 class OutputTransactionWithBusinessWalletListSchema(OutputTransactionListSchema):
+    id: uuid4 = None
     business_wallet_id: uuid4 = None
 
 
 @dataclass(frozen=True)
 class OutputTransactionWithCustomerWalletListSchema(OutputTransactionListSchema):
+    id: uuid4 = None
     customer_wallet_id: uuid4 = None
 
 
@@ -98,4 +100,5 @@ class OutputTransactionWithCustomerWalletListSchema(OutputTransactionListSchema)
 class OutputTransactionWithCustomerAndBusinessWalletListSchema(
     OutputTransactionWithBusinessWalletListSchema
 ):
+    id: uuid4 = None
     customer_wallet_id: uuid4 = None
