@@ -74,5 +74,6 @@ jobs:
             sudo rm -rf aplazame-backend
             git clone git@github.com:kingoodie/aplazame-backend.git
             cd aplazame-backend
+            cp sample.env .env
             sudo docker-compose build
             sudo docker-compose up
