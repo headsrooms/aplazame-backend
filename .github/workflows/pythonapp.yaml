@@ -49,12 +49,11 @@ jobs:
           source "$HOME/.poetry/env"
           make test
         env:
-          env:
-            POSTGRES_SERVER: db
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: 123456
-            POSTGRES_DB: app
-            POSTGRES_PORT: 5432
+          POSTGRES_SERVER: db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: app
+          POSTGRES_PORT: 5432
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
