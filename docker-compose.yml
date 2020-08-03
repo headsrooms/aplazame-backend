@@ -1,0 +1,21 @@
+version: '3.3'
+services:
+  backend:
+    depends_on:
+      - db
+    env_file:
+      - .env
+    build: .
+    ports:
+      - 80:80
+    command: /usr/local/poetry/bin/poetry run uvicorn api.app:app --workers 15 --port 80 --host 0.0.0.0
+  db:
+    image: postgres:latest
+    env_file:
+      - .env
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+volumes:
+  app-db-data:
