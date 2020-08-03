@@ -13,9 +13,10 @@ async def get_business_wallet_transactions(request: Request) -> UJSONResponse:
 
     try:
         transactions = (
-            await BusinessWallet.get(id=wallet_id)
+            await BusinessWallet.filter(id=wallet_id)
             .prefetch_related("transactions")
             .values(
+                id="transactions__id",
                 customer_wallet_id="transactions__customer_wallet__id",
                 amount="transactions__amount",
                 description="transactions__description",
