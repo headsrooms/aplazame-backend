@@ -13,7 +13,12 @@ HTTPS_ONLY = config("HTTPS_ONLY", cast=bool, default=False)
 GZIP_COMPRESSION = config("GZIP", cast=bool, default=False)
 SECRET = config("SECRET", cast=Secret, default=token_urlsafe(10))
 
-DB_URL = config("DB_URL", cast=str, default="sqlite://:memory:")
+DB_USER = config("POSTGRES_USER", cast=str)
+DB_PASSWORD = config("POSTGRES_PASSWORD", cast=str)
+DB_HOST = config("POSTGRES_SERVER", cast=str)
+DB_PORT = config("POSTGRES_PORT", cast=str)
+DB_NAME = config("POSTGRES_DB", cast=str)
+
 GENERATE_SCHEMAS = config("GENERATE_SCHEMAS", cast=bool, default=True)
 
 # The Sentry DSN is a unique identifier for our app when connecting to Sentry
