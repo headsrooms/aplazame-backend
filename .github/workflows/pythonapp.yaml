@@ -10,7 +10,6 @@ jobs:
         image: postgres
         # Provide the password for postgres
         env:
-          POSTGRES_SERVER: db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 123456
           POSTGRES_DB: app
@@ -51,7 +50,7 @@ jobs:
           source "$HOME/.poetry/env"
           make test
         env:
-          POSTGRES_SERVER: db
+          POSTGRES_HOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 123456
           POSTGRES_DB: app
