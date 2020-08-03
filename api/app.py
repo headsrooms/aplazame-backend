@@ -16,7 +16,8 @@ app = Starlette(
 
 register_tortoise(
     app,
-    db_url=f"postgres://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}",
+    # db_url=f"postgres://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}",
+    db_url="sqlite://db.sqlite",
     modules={"models": ["api.models"]},
     generate_schemas=settings.GENERATE_SCHEMAS,
 )
