@@ -156,11 +156,12 @@ funcionan correctamente?
    ello.
    ```
 
+
 ## API
 
 
 
-## Indices
+### Indices
 
 * [businesses](#businesses)
 
@@ -196,11 +197,11 @@ funcionan correctamente?
 --------
 
 
-## businesses
+### businesses
 
 
 
-### 1. Business signup
+#### 1. Business signup
 
 
 
@@ -294,11 +295,11 @@ URL: http://{{HOST}}:{{PORT}}/businesses
 
 
 
-## businesses/transactions
+### businesses/transactions
 
 
 
-### 1. Get business wallet transactions
+#### 1. Get business wallet transactions
 
 
 
@@ -325,7 +326,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375
 ***More example Requests/Responses:***
 
 
-##### I. Example Request: Get business wallet transactions (different transactions)
+##### I. Example Request: Get business wallet transactions
 
 
 
@@ -339,24 +340,34 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375
 
 
 
-##### I. Example Response: Get business wallet transactions (different transactions)
+##### I. Example Response: Get business wallet transactions
 ```js
 {
     "transactions": [
         {
+            "amount": 40000,
+            "description": "Compra coche",
+            "status": "denied",
+            "created_at": "2020-08-03 12:12:28.356742",
+            "error": "The amount debited must be less than the existing balance",
+            "id": "59780aff-c201-4eae-9c6d-fd6880326f45",
+            "customer_wallet_id": "8036bac9-0231-42d0-8f36-cd2819198e78"
+        },
+        {
             "amount": 500,
-            "description": "Cobro tele",
+            "description": "Cobro frigorífico",
             "status": "accepted",
-            "created_at": "2020-08-01 19:46:06.230613",
-            "customer_wallet_id": "125c8d9d-6de9-4da5-9f84-03edf803ed54"
+            "created_at": "2020-08-03 12:11:07.724301",
+            "id": "663f364b-2f12-4b3e-aacb-deb1a33f34ec",
+            "customer_wallet_id": "8036bac9-0231-42d0-8f36-cd2819198e78"
         },
         {
             "amount": 500,
             "description": "Cobro tele",
-            "status": "denied",
-            "created_at": "2020-08-01 19:33:36.386949",
-            "error": "The amount debited must be less than the existing balance",
-            "customer_wallet_id": "125c8d9d-6de9-4da5-9f84-03edf803ed54"
+            "status": "accepted",
+            "created_at": "2020-08-03 12:09:23.622455",
+            "id": "7a7ca37b-f316-4ba7-9fb7-dd44845683ff",
+            "customer_wallet_id": "8036bac9-0231-42d0-8f36-cd2819198e78"
         }
     ]
 }
@@ -369,76 +380,11 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375
 
 
 
-##### II. Example Request: Get business wallet transactions
+### businesses/wallets
 
 
 
-***Body:***
-
-```js        
-{
-    "business_id": "72c99433-07d6-4cbb-82c5-c26dab148f28"
-}
-```
-
-
-
-##### II. Example Response: Get business wallet transactions
-```js
-{
-    "transactions": [
-        {
-            "amount": 500,
-            "description": "Cobro tele",
-            "status": "denied",
-            "created_at": "2020-08-01 19:33:36.386949",
-            "error": "The amount debited must be less than the existing balance",
-            "customer_wallet_id": "125c8d9d-6de9-4da5-9f84-03edf803ed54"
-        }
-    ]
-}
-```
-
-
-***Status Code:*** 200
-
-<br>
-
-
-
-##### III. Example Request: Get business wallet transactions (empty)
-
-
-
-***Body:***
-
-```js        
-{
-    "business_id": "72c99433-07d6-4cbb-82c5-c26dab148f28"
-}
-```
-
-
-
-##### III. Example Response: Get business wallet transactions (empty)
-```js
-{
-    "transactions": []
-}
-```
-
-
-***Status Code:*** 200
-
-<br>
-
-
-
-## businesses/wallets
-
-
-
-### 1. Create business wallet
+#### 1. Create business wallet
 
 
 
@@ -524,7 +470,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets
 
 
 
-### 2. Debit money to customer wallet
+#### 2. Debit money to customer wallet
 
 
 
@@ -561,9 +507,9 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c
 
 ```js        
 {
-    "customer_wallet_id": "125c8d9d-6de9-4da5-9f84-03edf803ed54",
+    "customer_wallet_id": "8036bac9-0231-42d0-8f36-cd2819198e78",
     "amount": 500,
-    "description": "Cobro tele"
+    "description": "Cobro frigorífico"
 }
 ```
 
@@ -573,7 +519,8 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c
 ```js
 {
     "amount": 500,
-    "description": "Cobro tele"
+    "description": "Cobro frigorífico",
+    "id": "663f364b-2f12-4b3e-aacb-deb1a33f34ec"
 }
 ```
 
@@ -614,7 +561,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c
 
 
 
-### 3. Get business wallet
+#### 3. Get business wallet
 
 
 
@@ -672,11 +619,11 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375
 
 
 
-## customers
+### customers
 
 
 
-### 1. Customer signup
+#### 1. Customer signup
 
 
 
@@ -772,11 +719,11 @@ URL: http://{{HOST}}:{{PORT}}/customers
 
 
 
-## customers/transactions
+### customers/transactions
 
 
 
-### 1. Get all transactions of a customer
+#### 1. Get all transactions of a customer
 
 
 
@@ -793,24 +740,55 @@ URL: http://{{HOST}}:{{PORT}}/customers/213d94cd-1c7f-47f5-90e4-84bcc3eb6596/tra
 ***More example Requests/Responses:***
 
 
-##### I. Example Request: Get all transactions of a customer
+##### I. Example Request: Get all transactions of a customer (different transactions)
 
 
 
-##### I. Example Response: Get all transactions of a customer
+##### I. Example Response: Get all transactions of a customer (different transactions)
 ```js
 {
     "wallets": [
         {
-            "id": "125c8d9d-6de9-4da5-9f84-03edf803ed54",
+            "id": "8036bac9-0231-42d0-8f36-cd2819198e78",
             "transactions": [
+                {
+                    "amount": 40000,
+                    "description": "Compra coche",
+                    "status": "denied",
+                    "created_at": "2020-08-03 12:12:28.356742",
+                    "error": "The amount debited must be less than the existing balance",
+                    "id": "59780aff-c201-4eae-9c6d-fd6880326f45",
+                    "business_wallet_id": "a2ca7425-d60c-4267-ac04-7876e0a85898"
+                },
+                {
+                    "amount": 500,
+                    "description": "Cobro frigorífico",
+                    "status": "accepted",
+                    "created_at": "2020-08-03 12:11:07.724301",
+                    "id": "663f364b-2f12-4b3e-aacb-deb1a33f34ec",
+                    "business_wallet_id": "a2ca7425-d60c-4267-ac04-7876e0a85898"
+                },
                 {
                     "amount": 500,
                     "description": "Cobro tele",
-                    "status": "denied",
-                    "created_at": "2020-08-01 19:33:36.386949",
-                    "error": "The amount debited must be less than the existing balance",
-                    "business_wallet_id": "27c76390-8488-4d27-8173-de6447c7e7f5"
+                    "status": "accepted",
+                    "created_at": "2020-08-03 12:09:23.622455",
+                    "id": "7a7ca37b-f316-4ba7-9fb7-dd44845683ff",
+                    "business_wallet_id": "a2ca7425-d60c-4267-ac04-7876e0a85898"
+                },
+                {
+                    "amount": 500,
+                    "description": "Apertura cuenta",
+                    "status": "accepted",
+                    "created_at": "2020-08-03 11:57:21.235160",
+                    "id": "2795df0d-6e3e-4bc3-87b5-670ba1eb804f"
+                },
+                {
+                    "amount": 500,
+                    "description": "Apertura cuenta",
+                    "status": "accepted",
+                    "created_at": "2020-08-03 11:52:50.473025",
+                    "id": "bf6bb376-7e12-43b9-999c-ad1ab489fd8e"
                 }
             ]
         }
@@ -825,36 +803,30 @@ URL: http://{{HOST}}:{{PORT}}/customers/213d94cd-1c7f-47f5-90e4-84bcc3eb6596/tra
 
 
 
-##### II. Example Request: Get all transactions of a customer (different transactions)
+##### II. Example Request: Get all transactions of a customer
 
 
 
-##### II. Example Response: Get all transactions of a customer (different transactions)
+##### II. Example Response: Get all transactions of a customer
 ```js
 {
     "wallets": [
         {
-            "id": "125c8d9d-6de9-4da5-9f84-03edf803ed54",
+            "id": "8036bac9-0231-42d0-8f36-cd2819198e78",
             "transactions": [
                 {
                     "amount": 500,
                     "description": "Apertura cuenta",
                     "status": "accepted",
-                    "created_at": "2020-08-01 19:42:45.164079"
+                    "created_at": "2020-08-03 11:57:21.235160",
+                    "id": "2795df0d-6e3e-4bc3-87b5-670ba1eb804f"
                 },
                 {
                     "amount": 500,
                     "description": "Apertura cuenta",
                     "status": "accepted",
-                    "created_at": "2020-08-01 19:41:18.787873"
-                },
-                {
-                    "amount": 500,
-                    "description": "Cobro tele",
-                    "status": "denied",
-                    "created_at": "2020-08-01 19:33:36.386949",
-                    "error": "The amount debited must be less than the existing balance",
-                    "business_wallet_id": "27c76390-8488-4d27-8173-de6447c7e7f5"
+                    "created_at": "2020-08-03 11:52:50.473025",
+                    "id": "bf6bb376-7e12-43b9-999c-ad1ab489fd8e"
                 }
             ]
         }
@@ -869,7 +841,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/213d94cd-1c7f-47f5-90e4-84bcc3eb6596/tra
 
 
 
-### 2. Get all transactions of a customer wallet
+#### 2. Get all transactions of a customer wallet
 
 
 
@@ -935,11 +907,17 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/1a389eba-c7b9-4d78-baad-219021a1
     "transactions": [
         {
             "amount": 500,
-            "description": "Cobro tele",
-            "status": "denied",
-            "created_at": "2020-08-01 19:33:36.386949",
-            "error": "The amount debited must be less than the existing balance",
-            "business_wallet_id": "27c76390-8488-4d27-8173-de6447c7e7f5"
+            "description": "Apertura cuenta",
+            "status": "accepted",
+            "created_at": "2020-08-03 11:57:21.235160",
+            "id": "2795df0d-6e3e-4bc3-87b5-670ba1eb804f"
+        },
+        {
+            "amount": 500,
+            "description": "Apertura cuenta",
+            "status": "accepted",
+            "created_at": "2020-08-03 11:52:50.473025",
+            "id": "bf6bb376-7e12-43b9-999c-ad1ab489fd8e"
         }
     ]
 }
@@ -952,11 +930,11 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/1a389eba-c7b9-4d78-baad-219021a1
 
 
 
-## customers/wallets
+### customers/wallets
 
 
 
-### 1. Create customer wallet
+#### 1. Create customer wallet
 
 
 
@@ -1043,7 +1021,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets
 
 
 
-### 2. Deposit money in wallet
+#### 2. Deposit money in wallet
 
 
 
@@ -1119,7 +1097,8 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/af8017c1-fa3c-482e-be51-fc161677
 ```js
 {
     "amount": 500,
-    "description": "Apertura cuenta"
+    "description": "Apertura cuenta",
+    "id": "2795df0d-6e3e-4bc3-87b5-670ba1eb804f"
 }
 ```
 
@@ -1130,7 +1109,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/af8017c1-fa3c-482e-be51-fc161677
 
 
 
-### 3. Get all wallets of a customer
+#### 3. Get all wallets of a customer
 
 
 
@@ -1172,7 +1151,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/ae991d93-a6b7-4906-a850-9752430dac12/wal
 
 
 
-### 4. Get customer wallet
+#### 4. Get customer wallet
 
 
 
