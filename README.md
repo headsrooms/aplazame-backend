@@ -168,6 +168,7 @@ funcionan correctamente?
 # API
 
 
+
 ## Indices
 
 * [businesses](#businesses)
@@ -449,7 +450,35 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets
 
 
 
-##### II. Example Request: Bad business wallet creation without business_id
+##### II. Example Request: Create business wallet when there is already one
+
+
+
+***Body:***
+
+```js        
+{
+    "business_id": "{{business_id}}"
+}
+```
+
+
+
+##### II. Example Response: Create business wallet when there is already one
+```js
+{
+    "detail": "There can only be one wallet per business"
+}
+```
+
+
+***Status Code:*** 409
+
+<br>
+
+
+
+##### III. Example Request: Bad business wallet creation without business_id
 
 
 
@@ -463,7 +492,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets
 
 
 
-##### II. Example Response: Bad business wallet creation without business_id
+##### III. Example Response: Bad business wallet creation without business_id
 ```js
 {
     "detail": "There is no 'business_id' key in the json of the request"
