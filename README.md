@@ -165,11 +165,10 @@ funcionan correctamente?
    ```
 
 
-## API
+# API
 
 
-
-### Indices
+## Indices
 
 * [businesses](#businesses)
 
@@ -205,11 +204,11 @@ funcionan correctamente?
 --------
 
 
-### businesses
+## businesses
 
 
 
-#### 1. Business signup
+### 1. Business signup
 
 
 
@@ -303,11 +302,11 @@ URL: http://{{HOST}}:{{PORT}}/businesses
 
 
 
-### businesses/transactions
+## businesses/transactions
 
 
 
-#### 1. Get business wallet transactions
+### 1. Get business wallet transactions
 
 
 
@@ -316,7 +315,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses
 ```bash
 Method: GET
 Type: RAW
-URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375b519c/transactions
+URL: http://{{HOST}}:{{PORT}}/businesses/wallets/{{business_wallet_id}}/transactions
 ```
 
 
@@ -388,11 +387,11 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375
 
 
 
-### businesses/wallets
+## businesses/wallets
 
 
 
-#### 1. Create business wallet
+### 1. Create business wallet
 
 
 
@@ -410,7 +409,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets
 
 ```js        
 {
-    "business_id": "72c99433-07d6-4cbb-82c5-c26dab148f28"
+    "business_id": "{{business_id}}"
 }
 ```
 
@@ -478,7 +477,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets
 
 
 
-#### 2. Debit money to customer wallet
+### 2. Debit money to customer wallet
 
 
 
@@ -487,7 +486,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets
 ```bash
 Method: POST
 Type: RAW
-URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c7e7f5/debit
+URL: http://{{HOST}}:{{PORT}}/businesses/wallets/{{business_wallet_id}}/debit
 ```
 
 
@@ -496,7 +495,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c
 
 ```js        
 {
-    "customer_wallet_id": "125c8d9d-6de9-4da5-9f84-03edf803ed54",
+    "customer_wallet_id": "{{wallet_id}}",
     "amount": 500,
     "description": "Cobro tele"
 }
@@ -569,7 +568,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c
 
 
 
-#### 3. Get business wallet
+### 3. Get business wallet
 
 
 
@@ -578,7 +577,7 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/27c76390-8488-4d27-8173-de6447c
 ```bash
 Method: GET
 Type: RAW
-URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375b519c
+URL: http://{{HOST}}:{{PORT}}/businesses/wallets/{{business_wallet_id}}
 ```
 
 
@@ -627,11 +626,11 @@ URL: http://{{HOST}}:{{PORT}}/businesses/wallets/fa6c6725-ed55-4fee-b75c-2bcb375
 
 
 
-### customers
+## customers
 
 
 
-#### 1. Customer signup
+### 1. Customer signup
 
 
 
@@ -727,11 +726,11 @@ URL: http://{{HOST}}:{{PORT}}/customers
 
 
 
-### customers/transactions
+## customers/transactions
 
 
 
-#### 1. Get all transactions of a customer
+### 1. Get all transactions of a customer
 
 
 
@@ -740,7 +739,7 @@ URL: http://{{HOST}}:{{PORT}}/customers
 ```bash
 Method: GET
 Type: 
-URL: http://{{HOST}}:{{PORT}}/customers/213d94cd-1c7f-47f5-90e4-84bcc3eb6596/transactions
+URL: http://{{HOST}}:{{PORT}}/customers/{{customer_id}}/transactions
 ```
 
 
@@ -849,7 +848,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/213d94cd-1c7f-47f5-90e4-84bcc3eb6596/tra
 
 
 
-#### 2. Get all transactions of a customer wallet
+### 2. Get all transactions of a customer wallet
 
 
 
@@ -858,7 +857,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/213d94cd-1c7f-47f5-90e4-84bcc3eb6596/tra
 ```bash
 Method: GET
 Type: 
-URL: http://{{HOST}}:{{PORT}}/customers/wallets/1a389eba-c7b9-4d78-baad-219021a1256f/transactions
+URL: http://{{HOST}}:{{PORT}}/customers/wallets/{{wallet_id}}/transactions
 ```
 
 
@@ -938,11 +937,11 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/1a389eba-c7b9-4d78-baad-219021a1
 
 
 
-### customers/wallets
+## customers/wallets
 
 
 
-#### 1. Create customer wallet
+### 1. Create customer wallet
 
 
 
@@ -960,7 +959,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets
 
 ```js        
 {
-    "customer_id": "ae991d93-a6b7-4906-a850-9752430dac12"
+    "customer_id": "{{customer_id}}"
 }
 ```
 
@@ -1029,7 +1028,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets
 
 
 
-#### 2. Deposit money in wallet
+### 2. Deposit money in wallet
 
 
 
@@ -1038,7 +1037,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets
 ```bash
 Method: POST
 Type: RAW
-URL: http://{{HOST}}:{{PORT}}/customers/wallets/af8017c1-fa3c-482e-be51-fc1616771cd6/deposit
+URL: http://{{HOST}}:{{PORT}}/customers/wallets/{{wallet_id}}/deposit
 ```
 
 
@@ -1117,7 +1116,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/af8017c1-fa3c-482e-be51-fc161677
 
 
 
-#### 3. Get all wallets of a customer
+### 3. Get all wallets of a customer
 
 
 
@@ -1126,7 +1125,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/wallets/af8017c1-fa3c-482e-be51-fc161677
 ```bash
 Method: GET
 Type: 
-URL: http://{{HOST}}:{{PORT}}/customers/ae991d93-a6b7-4906-a850-9752430dac12/wallets
+URL: http://{{HOST}}:{{PORT}}/customers/{{customer_id}}/wallets
 ```
 
 
@@ -1159,7 +1158,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/ae991d93-a6b7-4906-a850-9752430dac12/wal
 
 
 
-#### 4. Get customer wallet
+### 4. Get customer wallet
 
 
 
@@ -1168,7 +1167,7 @@ URL: http://{{HOST}}:{{PORT}}/customers/ae991d93-a6b7-4906-a850-9752430dac12/wal
 ```bash
 Method: GET
 Type: 
-URL: http://{{HOST}}:{{PORT}}/customers/wallets/36f1cfba-e466-450a-b84a-07d45fa79c5b
+URL: http://{{HOST}}:{{PORT}}/customers/wallets/{{wallet_id}}
 ```
 
 
