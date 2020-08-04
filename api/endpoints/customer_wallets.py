@@ -4,15 +4,17 @@ from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import UJSONResponse
 from starlette.status import HTTP_201_CREATED
-from tortoise.exceptions import DoesNotExist
+from tortoise.exceptions import DoesNotExist, OperationalError
+from tortoise.transactions import in_transaction
 from ujson import loads
 
 from api.constants import MALFORMED_JSON_MESSAGE
-from api.exceptions import AmountMustBeAPositiveNumber
+from api.exceptions import AmountMustBeAPositiveNumber, UnexpectedError
 from api.models import (
     Customer,
     CustomerWallet,
-    DepositTransaction,
+    CustomerDepositTransaction,
+    TransactionStatus,
 )
 from api.schemas import (
     OutputCustomerWalletSchema,
@@ -74,16 +76,23 @@ async def deposit(request: Request) -> UJSONResponse:
         _ = await CustomerWallet.get(id=wallet_id)
         payload = await request.json()
         transaction_data = InputDepositTransactionSchema.parse_obj(payload)
-        transaction = await DepositTransaction.create(
-            **transaction_data.dict(), customer_wallet_id=wallet_id
-        )
+
+        async with in_transaction() as connection:
+            transaction = await CustomerDepositTransaction.create(
+                **transaction_data.dict(),
+                customer_wallet_id=wallet_id,
+                using_db=connection,
+            )
+
+            if transaction.status == TransactionStatus.DENIED:
+                raise UnexpectedError(transaction.error)
     except DoesNotExist:
         raise HTTPException(
             status_code=404, detail=f"There is no wallet with id {wallet_id}"
         )
     except JSONDecodeError:
         raise HTTPException(status_code=400, detail=MALFORMED_JSON_MESSAGE)
-    except AmountMustBeAPositiveNumber as e:
+    except (AmountMustBeAPositiveNumber, OperationalError, UnexpectedError) as e:
         raise HTTPException(status_code=409, detail=str(e))
 
     response = OutputDepositTransactionSchema.from_orm(transaction)

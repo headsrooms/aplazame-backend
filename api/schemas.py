@@ -10,7 +10,7 @@ from api.models import (
     CustomerWallet,
     BusinessWallet,
     Business,
-    DepositTransaction,
+    CustomerDepositTransaction,
     DebitTransaction,
     TransactionStatus,
 )
@@ -34,13 +34,15 @@ OutputBusinessSchema = pydantic_model_creator(Business)
 # BusinessWallet
 OutputBusinessWalletSchema = pydantic_model_creator(BusinessWallet)
 
-# DepositTransaction
+# CustomerDepositTransaction
 InputDepositTransactionSchema = pydantic_model_creator(
-    DepositTransaction,
+    CustomerDepositTransaction,
     exclude=("id", "customer_wallet", "created_at", "status", "error"),
 )
-OutputDepositTransactionSchema = pydantic_model_creator(DepositTransaction)
-OutputDepositTransactionListSchema = pydantic_queryset_creator(DepositTransaction)
+OutputDepositTransactionSchema = pydantic_model_creator(CustomerDepositTransaction)
+OutputDepositTransactionListSchema = pydantic_queryset_creator(
+    CustomerDepositTransaction
+)
 
 # DebitTransaction
 InputDebitTransactionSchema = pydantic_model_creator(

@@ -4,11 +4,12 @@ from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import UJSONResponse
 from starlette.status import HTTP_201_CREATED
-from tortoise.exceptions import DoesNotExist
+from tortoise.exceptions import DoesNotExist, OperationalError
+from tortoise.transactions import in_transaction
 from ujson import loads
 
 from api.constants import MALFORMED_JSON_MESSAGE
-from api.exceptions import AmountMustBeAPositiveNumber, NotEnoughBalance
+from api.exceptions import AmountMustBeAPositiveNumber, NotEnoughBalance, UnexpectedError
 from api.models import (
     CustomerWallet,
     DebitTransaction,
@@ -81,20 +82,19 @@ async def debit(request: Request) -> UJSONResponse:
             )
 
         transaction_data = InputDebitTransactionSchema.parse_obj(payload)
-        transaction = await DebitTransaction.create(
-            **transaction_data.dict(),
-            customer_wallet_id=customer_wallet_id,
-            business_wallet_id=business_wallet_id,
-        )
-        if transaction.status == TransactionStatus.DENIED:
-            raise NotEnoughBalance(
-                "The amount debited must be less than the existing balance"
+
+        async with in_transaction() as connection:
+            transaction = await DebitTransaction.create(
+                **transaction_data.dict(),
+                customer_wallet_id=customer_wallet_id,
+                business_wallet_id=business_wallet_id,
+                using_db=connection,
             )
+            if transaction.status == TransactionStatus.DENIED:
+                raise UnexpectedError(transaction.error)
     except JSONDecodeError:
         raise HTTPException(status_code=400, detail=MALFORMED_JSON_MESSAGE)
-    except AmountMustBeAPositiveNumber as e:
-        raise HTTPException(status_code=409, detail=str(e))
-    except NotEnoughBalance as e:
+    except (AmountMustBeAPositiveNumber, NotEnoughBalance, OperationalError, UnexpectedError) as e:
         raise HTTPException(status_code=409, detail=str(e))
 
     response = OutputDebitTransactionSchema.from_orm(transaction)
