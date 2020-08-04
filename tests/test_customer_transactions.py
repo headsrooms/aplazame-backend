@@ -38,14 +38,12 @@ def test_get_customer_wallet_transactions(
         f"/customers/wallets/{str(customer_wallet.id)}/transactions"
     ).json()["transactions"]
 
-
     all_transactions = (
         ten_deposit_transactions_in_a_wallet + ten_debit_transactions_in_a_wallet
     )
     all_transactions_ids = [str(transaction.id) for transaction in all_transactions]
     received_transactions_ids = [
-        transaction["id"]
-        for transaction in received_transactions
+        transaction["id"] for transaction in received_transactions
     ]
     assert all(
         [
