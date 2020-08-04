@@ -34,4 +34,4 @@ if SENTRY_DSN:  # pragma: nocover
 if DEBUG:
     DB_URL = "sqlite://db.sqlite"
 else:
-    DB_URL=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",
+    DB_URL=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
