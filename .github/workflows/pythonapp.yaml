@@ -3,24 +3,6 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    services:
-      # Label used to access the service container
-      db:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: app
-          POSTGRES_PORT: 5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
     strategy:
       matrix:
         python-version: [3.8]
@@ -50,11 +32,7 @@ jobs:
           source "$HOME/.poetry/env"
           make test
         env:
-          POSTGRES_SERVER: db
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 123456
-          POSTGRES_DB: app
-          POSTGRES_PORT: 5432
+          DEBUG: true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
