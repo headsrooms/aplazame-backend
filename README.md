@@ -4,6 +4,9 @@
 ![test](https://github.com/kingoodie/aplazame-backend/workflows/test/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/kingoodie/aplazame-backend/branch/master/graph/badge.svg?token=T6GDCHEMI3)](https://codecov.io/gh/kingoodie/aplazame-backend)
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/5143f4e5a1bde13da691)
+
+It would remain to do the tests on the business endpoints.
+
 ## Install
 
     pip install poetry
