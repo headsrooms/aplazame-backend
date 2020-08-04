@@ -50,7 +50,7 @@ jobs:
           source "$HOME/.poetry/env"
           make test
         env:
-          POSTGRES_SERVER: localhost
+          POSTGRES_SERVER: db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 123456
           POSTGRES_DB: app
