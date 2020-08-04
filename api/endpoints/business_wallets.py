@@ -4,7 +4,7 @@ from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import UJSONResponse
 from starlette.status import HTTP_201_CREATED
-from tortoise.exceptions import DoesNotExist, OperationalError
+from tortoise.exceptions import DoesNotExist, OperationalError, IntegrityError
 from tortoise.transactions import in_transaction
 from ujson import loads
 
@@ -29,6 +29,7 @@ async def create_business_wallet(request: Request) -> UJSONResponse:
         payload = await request.json()
         business_id = payload["business_id"]
         _ = await Business.get(id=business_id)
+        wallet = await BusinessWallet.create(business_id=business_id)
     except JSONDecodeError:
         raise HTTPException(status_code=400, detail=MALFORMED_JSON_MESSAGE)
     except KeyError:
@@ -40,8 +41,10 @@ async def create_business_wallet(request: Request) -> UJSONResponse:
         raise HTTPException(
             status_code=404, detail=f"There is no business with id {business_id}"
         )
-
-    wallet = await BusinessWallet.create(business_id=business_id)
+    except IntegrityError:
+        raise HTTPException(
+            status_code=409, detail=f"There can only be one wallet per business"
+        )
     response = OutputBusinessWalletSchema.from_orm(wallet)
     return UJSONResponse(loads(response.json()), status_code=HTTP_201_CREATED)
 
