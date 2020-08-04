@@ -2,20 +2,28 @@ import asyncio
 from dataclasses import asdict
 from random import uniform
 
+import httpx
 import pytest
+from asgi_lifespan import LifespanManager
 from faker import Faker
+from starlette.applications import Starlette
 from starlette.testclient import TestClient
+from tortoise.contrib.starlette import register_tortoise
 from tortoise.transactions import in_transaction
 
+from api import settings
 from api.app import app
+from api.exception_handlers import exception_handlers
+from api.middleware import middleware
 from api.models import (
     Customer,
     Business,
     CustomerWallet,
     DebitTransaction,
     BusinessWallet,
-    DepositTransaction,
+    CustomerDepositTransaction,
 )
+from api.routes import routes
 from api.schemas import (
     InputCustomerSchema,
     OutputCustomerSchema,
@@ -37,6 +45,34 @@ def client(request):
         yield c
 
 
+@pytest.fixture(scope="session")
+async def app_for_httpx():
+    app = Starlette(
+        debug=settings.DEBUG,
+        routes=routes,
+        middleware=middleware,
+        exception_handlers=exception_handlers,
+    )
+
+    register_tortoise(
+        app,
+        db_url="sqlite://:memory:",
+        modules={"models": ["api.models"]},
+        generate_schemas=settings.GENERATE_SCHEMAS,
+    )
+
+    async with LifespanManager(app):
+        yield app
+
+
+@pytest.fixture(scope="session")
+async def async_client(request, app_for_httpx):
+    async with httpx.AsyncClient(
+        app=app_for_httpx, base_url="http://localhost"
+    ) as client:
+        yield client
+
+
 def customer_data():
     faker = Faker()
     return InputCustomerSchema(
@@ -47,7 +83,6 @@ def customer_data():
     )
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def random_customer():
     customer = await Customer.create(**customer_data().dict())
@@ -63,7 +98,6 @@ def business_data():
     )
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def random_business():
     business = await Business.create(**business_data().dict())
@@ -72,7 +106,6 @@ async def random_business():
     await business.delete()
 
 
-@pytest.mark.asyncio
 @pytest.fixture(scope="session", params=[1000])
 async def random_customers(request):
     async def fin():
@@ -95,7 +128,6 @@ async def random_customers(request):
     yield customers_db, customers
 
 
-@pytest.mark.asyncio
 @pytest.fixture(scope="session", params=[1000])
 async def random_businesses(request):
     async def fin():
@@ -118,7 +150,6 @@ async def random_businesses(request):
     yield businesses_db, businesses
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def customer_wallet(random_customer):
     wallet = await CustomerWallet.create(customer_id=random_customer.id)
@@ -127,7 +158,6 @@ async def customer_wallet(random_customer):
     await wallet.delete()
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def customer_wallets(random_customer):
     wallets = [
@@ -139,7 +169,6 @@ async def customer_wallets(random_customer):
         await wallet.delete()
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def business_wallet(random_business):
     wallet = await BusinessWallet.create(business_id=random_business.id)
@@ -148,7 +177,6 @@ async def business_wallet(random_business):
     await wallet.delete()
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def business_wallets(random_business):
     wallets = [
@@ -160,7 +188,6 @@ async def business_wallets(random_business):
         await wallet.delete()
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def deposit_transaction_data(customer_wallet):
     faker = Faker()
@@ -171,7 +198,6 @@ async def deposit_transaction_data(customer_wallet):
     }
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def n_deposit_transaction_data(customer_wallet, n=10):
     faker = Faker()
@@ -186,7 +212,6 @@ async def n_deposit_transaction_data(customer_wallet, n=10):
     ]
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def debit_transaction_data(customer_wallet, business_wallet):
     faker = Faker()
@@ -199,7 +224,6 @@ async def debit_transaction_data(customer_wallet, business_wallet):
     }
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def n_debit_transaction_data(customer_wallet, business_wallet, n=10):
     faker = Faker()
@@ -215,11 +239,10 @@ async def n_debit_transaction_data(customer_wallet, business_wallet, n=10):
     ]
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def ten_deposit_transactions_in_a_wallet(n_deposit_transaction_data):
     transactions = [
-        await DepositTransaction.create(**deposit_transaction_data)
+        await CustomerDepositTransaction.create(**deposit_transaction_data)
         for deposit_transaction_data in n_deposit_transaction_data
     ]
     yield transactions
@@ -228,7 +251,6 @@ async def ten_deposit_transactions_in_a_wallet(n_deposit_transaction_data):
         await transaction.delete()
 
 
-@pytest.mark.asyncio
 @pytest.fixture
 async def ten_debit_transactions_in_a_wallet(n_debit_transaction_data):
     transactions = [
