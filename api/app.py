@@ -6,6 +6,7 @@ from api import settings
 from api.exception_handlers import exception_handlers
 from api.middleware import middleware
 from api.routes import routes
+from api.settings import DB_URL
 
 app = Starlette(
     debug=settings.DEBUG,
@@ -16,7 +17,7 @@ app = Starlette(
 
 register_tortoise(
     app,
-    db_url=f"postgres://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}",
+    db_url=DB_URL,
     modules={"models": ["api.models"]},
     generate_schemas=settings.GENERATE_SCHEMAS,
 )

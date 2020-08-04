@@ -30,3 +30,8 @@ if SENTRY_DSN:  # pragma: nocover
     import sentry_sdk
 
     sentry_sdk.init(dsn=SENTRY_DSN, release=RELEASE_VERSION)
+
+if DEBUG:
+    DB_URL = "sqlite://db.sqlite"
+else:
+    DB_URL=f"postgres://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}",

@@ -56,7 +56,7 @@ async def app_for_httpx():
 
     register_tortoise(
         app,
-        db_url="sqlite://:memory:",
+        db_url=settings.DB_URL,
         modules={"models": ["api.models"]},
         generate_schemas=settings.GENERATE_SCHEMAS,
     )
