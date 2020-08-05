@@ -131,7 +131,7 @@ con alguna NoSQL, ¿qué me recomiendas?
    MongoDB o ElasticSearch
    - Si los datos tienen baja dimensionalidad y el tiempo es una columna clave, se debería de utilizar una base
    de datos de series de tiempo como pueden ser Influx o Prometheus en otras.
-   - Si se necesita realizar análisis sobre datos no normalizadas utilizaría Clickhouse. Clickhouse utiliza
+   - Si se necesita realizar análisis sobre datos no normalizados utilizaría Clickhouse. Clickhouse utiliza
    como lenguaje SQL, aunque digamos que no está diseñado para comportarse igual que las relacionales tradicionales.
    - Si el valor de la información está en la conexión entre los datos o los modelos de las bases de datos relacionales
    usaran relaciones ManyToMany en exceso, usaría alguna base de datos de grafos como Neo4j.
